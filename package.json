@@ -9,7 +9,11 @@
   "author": "Mir",
   "license": "ISC",
   "devDependencies": {
+    "gsap": "^1.19.1",
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "moment": "^2.18.1"
   }
 }
