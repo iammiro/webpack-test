@@ -1,12 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     context: path.resolve(__dirname, './src'),
 
     entry: {
-        app: './index.js',
+        app: './index.pug',
     },
 
     output: {
@@ -18,23 +19,26 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                exclude: [/node_modules/],
+                exclude: /node_modules/,
                 use: [{
                     loader: 'babel-loader',
                     options: {presets: ['es2015']},
                 }],
             },
             {
+                test: /\.pug$/,
+                use: ['pug-loader'],
+            },
+            {
                 test: /\.css$/,
-                // use: ['style-loader', 'css-loader']
                 loader: ExtractTextPlugin.extract({
-                    loader: 'css-loader?importLoaders=1&modules=true',
+                    use: ['css-loader?importLoaders=1&modules=true'],
                 }),
             },
             {
                 test: /\.sass$/,
-                loader:    ExtractTextPlugin.extract({
-                    loader: 'css-loader!sass-loader',
+                loader: ExtractTextPlugin.extract({
+                    use: ['css-loader', 'sass-loader'],
                 }),
             }
         ]
@@ -45,9 +49,20 @@ module.exports = {
             filename: '[name].bundle.css',
             allChunks: true,
         }),
+        new HtmlWebpackPlugin({
+            title: 'Webpack test project',
+            minify: {
+                collapseWhitespace: true
+            },
+            hash: true,
+            template: './index.pug',
+        }),
     ],
 
     devServer: {
-        contentBase: path.resolve(__dirname, './src'),
+        contentBase: path.join(__dirname, "dist"),
+        compress: true,
+        stats: "errors-only",
+        open: true
     }
 }
