@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 module.exports = {
     context: path.resolve(__dirname, './src'),
@@ -28,6 +29,13 @@ module.exports = {
             {
                 test: /\.pug$/,
                 use: ['pug-loader'],
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                use: [
+                    'file-loader?hash=sha512&digest=hex&name=images/[hash].[ext]',
+                    'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                ],
             },
             {
                 test: /\.css$/,
@@ -57,11 +65,15 @@ module.exports = {
             hash: true,
             template: './index.pug',
         }),
+        new FaviconsWebpackPlugin('./images/webpack-logo.png')
+        // new webpack.HotModuleReplacementPlugin(),
+        // new webpack.NamedModulesPlugin(),
     ],
 
     devServer: {
         contentBase: path.join(__dirname, "dist"),
         compress: true,
+        // hot: true,
         stats: "errors-only",
         open: true
     }
