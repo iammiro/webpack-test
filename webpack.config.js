@@ -48,7 +48,14 @@ module.exports = {
                 loader: ExtractTextPlugin.extract({
                     use: ['css-loader', 'sass-loader'],
                 }),
-            }
+            },
+            {
+                test: /\.(ttf|eot|woff|woff2)$/,
+                loader: 'file-loader',
+                options: {
+                    name: 'fonts/[name].[ext]',
+                },
+            },
         ]
     },
 
